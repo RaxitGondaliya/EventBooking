@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
           itemCount: snapshot.data.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot ds = snapshot.data.docs[index];
-            return buildEventCard(ds); // ← Only this line changed
+            return buildEventCard(ds);
           },
         );
       },
@@ -52,99 +52,93 @@ class _HomeState extends State<Home> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.location_on_outlined),
-                    SizedBox(width: 5),
-                    Expanded(
-                      child: Text(
-                        "30, madhavpark limbdi",
+      body: Container(
+        padding: EdgeInsets.only(top: 10.0),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xffe3e6ff), Color(0xfff1f3ff), Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello, Raxit",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Find exciting events\naround your campus.",
+                    style: TextStyle(
+                      color: Color(0xff6351ec),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    height: 55,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    alignment: Alignment.center,
+                    child: TextField(
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: "Search an Event",
+                        border: InputBorder.none,
+                        isCollapsed: true,
+                        suffixIcon: Icon(Icons.search_outlined),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  SizedBox(
+                    height: 136,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        buildSmallCard("images/ai.png", "AI"),
+                        buildSmallCard("images/hacker.png", "Hacking"),
+                        buildSmallCard("images/java.png", "Java"),
+                        buildSmallCard("images/php.png", "PHP"),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Upcoming Event",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "See all",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Hello, Raxit",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "There are 20 events\naround your location.",
-                  style: TextStyle(
-                    color: Color(0xff6351ec),
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  height: 55,
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  alignment: Alignment.center,
-                  child: TextField(
-                    textAlignVertical: TextAlignVertical.center,
-                    decoration: InputDecoration(
-                      hintText: "Search an Event",
-                      border: InputBorder.none,
-                      isCollapsed: true,
-                      suffixIcon: Icon(Icons.search_outlined),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                SizedBox(
-                  height: 136,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      buildSmallCard("images/ai.png", "AI"),
-                      buildSmallCard("images/hacker.png", "Hacking"),
-                      buildSmallCard("images/java.png", "Java"),
-                      buildSmallCard("images/php.png", "PHP"),
                     ],
                   ),
-                ),
-                SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Upcoming Event",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "See all",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                allEvents(), // event list
-              ],
+                  SizedBox(height: 20),
+                  allEvents(),
+                ],
+              ),
             ),
           ),
         ),
@@ -183,26 +177,25 @@ class _HomeState extends State<Home> {
 
   Widget buildEventCard(DocumentSnapshot ds) {
     final screenWidth = MediaQuery.of(context).size.width;
-
-    final imagePath = (ds["Image"] != null && ds["Image"].toString().trim().isNotEmpty)
-        ? "images/${ds["Image"]}"
-        : "images/Hackathon.jpg";
-
-    final date = DateFormat('MMM, dd').format(DateTime.parse(ds["Date"] ?? "2000-01-01"));
+    final imagePath = ds["Image"] ?? "";
+    final date = DateFormat(
+      'MMM, dd',
+    ).format(DateTime.parse(ds["Date"] ?? "2000-01-01"));
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailPage(
-              date: ds["Date"],
-              detail: ds["Detail"],
-              image: ds["Image"],
-              location: ds["Location"],
-              name: ds["Name"],
-              price: ds["Price"],
-            ),
+            builder:
+                (context) => DetailPage(
+                  date: ds["Date"],
+                  detail: ds["Detail"],
+                  image: ds["Image"],
+                  location: ds["Location"],
+                  name: ds["Name"],
+                  price: ds["Price"],
+                ),
           ),
         );
       },
@@ -213,7 +206,7 @@ class _HomeState extends State<Home> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
+                child: Image.network(
                   imagePath,
                   height: 200,
                   width: screenWidth,
