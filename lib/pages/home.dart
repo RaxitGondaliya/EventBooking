@@ -74,14 +74,29 @@ class _HomeState extends State<Home> {
                     style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    "Find exciting events\naround your campus.",
-                    style: TextStyle(
-                      color: Color(0xff6351ec),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+
+                  StreamBuilder(
+                    stream:
+                        FirebaseFirestore.instance
+                            .collection("Event")
+                            .snapshots(),
+                    builder: (context, snapshot) {
+                      int count = 0;
+                      if (snapshot.hasData && snapshot.data != null) {
+                        count = snapshot.data!.docs.length;
+                      }
+
+                      return Text(
+                        "Explore $count opportunities to engage, learn, and grow.",
+                        style: TextStyle(
+                          color: Color(0xff6351ec),
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
+
                   SizedBox(height: 20),
                   Container(
                     height: 55,

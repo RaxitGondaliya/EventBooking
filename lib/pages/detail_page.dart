@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class DetailPage extends StatefulWidget {
-  // const DetailPage({super.key});
   String image, name, location, date, detail, price;
   DetailPage({
     required this.date,
@@ -22,11 +21,12 @@ class _DetailPageState extends State<DetailPage> {
   bool isImageDark = true;
 
   // ✅ Define ImageProvider once
-  final ImageProvider eventImage = AssetImage("images/Hackathon.jpg");
+  late ImageProvider eventImage;
 
   @override
   void initState() {
     super.initState();
+    eventImage = NetworkImage(widget.image); // ✅ Use dynamic image
     _updatePalette();
   }
 
