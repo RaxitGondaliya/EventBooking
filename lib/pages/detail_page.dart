@@ -205,13 +205,18 @@ class _DetailPageState extends State<DetailPage> {
                                   color: Color(0xff6351ec),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    "Book Now",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
+                                child: GestureDetector(
+                                  onTap: () => {
+                                    
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      "Book Now",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),

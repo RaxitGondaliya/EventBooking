@@ -15,14 +15,18 @@ class _BottomNavState extends State<BottomNav> {
   late List<Widget> pages;
   late Home home;
   late Booking booking;
-  late Profile profile;
+  late ProfilePage profile;
   int currentTabIndex = 0;
 
   @override
   void initState() {
     home = Home();
     booking = Booking();
-    profile = Profile();
+    profile = ProfilePage(
+      userName: "Raxit Gondaliya",
+      userEmail: "raxitgondaliya@gmail.com",
+      profileImageUrl: "https://www.w3schools.com/howto/img_avatar.png",
+    );
     pages = [home, booking, profile];
     super.initState();
   }

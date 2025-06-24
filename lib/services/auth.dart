@@ -1,39 +1,41 @@
 import 'package:eventbooking/pages/bottomnav.dart';
+import 'package:eventbooking/pages/signup.dart';
 import 'package:eventbooking/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthMethod {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  getCurrentUser() async {
-    return await auth.currentUser;
+  Future<User?> getCurrentUser() async {
+    return auth.currentUser;
   }
 
-  signInWithGoogle(BuildContext context) async {
-    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  // 🔹 Sign In With Google
+  Future<void> signInWithGoogle(BuildContext context) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
 
-    final GoogleSignInAuthentication? googleSignInAuthentication =
-        await googleSignInAccount?.authentication;
+    if (googleSignInAccount == null) return; // user canceled
+
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleSignInAuthentication?.idToken,
-      accessToken: googleSignInAuthentication?.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+      accessToken: googleSignInAuthentication.accessToken,
     );
 
-    UserCredential result = await firebaseAuth.signInWithCredential(credential);
+    UserCredential result = await auth.signInWithCredential(credential);
 
     User? userDetails = result.user;
 
-    if (result != null) {
+    if (userDetails != null) {
       Map<String, dynamic> userInfoMap = {
-        "Name": userDetails!.displayName,
+        "Name": userDetails.displayName,
         "Image": userDetails.photoURL,
         "Email": userDetails.email,
         "Id": userDetails.uid,
@@ -46,16 +48,29 @@ class AuthMethod {
           SnackBar(
             backgroundColor: Colors.green,
             content: Text(
-              "Registered succesfully",
+              "Registered successfully",
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
           ),
         );
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => BottomNav()),
         );
       });
     }
+  }
+
+  // 🔹 Logout / Sign Out
+  Future<void> signOut(BuildContext context) async {
+    await GoogleSignIn().signOut();
+    await auth.signOut();
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const SignUp()),
+      (route) => false,
+    );
   }
 }
