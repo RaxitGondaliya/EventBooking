@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:eventbooking/services/database.dart';
+import 'package:eventbooking/services/admin_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -262,7 +262,7 @@ class _UploadEvent extends State<UploadEvent> {
 
                 _buildTextLabel("Select Departments"),
                 SizedBox(height: 10.0),
-                
+
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20.0),
                   height: 60, // same as other fields
@@ -395,7 +395,7 @@ class _UploadEvent extends State<UploadEvent> {
                           "Time": formatTimeofDay(selectedTime),
                         };
 
-                        await DatabaseMethods().addEvent(uploadevent, id);
+                        await AdminDatabase().addEvent(uploadevent, id);
 
                         setState(() {
                           isUploading = false;

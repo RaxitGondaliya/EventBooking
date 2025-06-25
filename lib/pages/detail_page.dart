@@ -206,9 +206,7 @@ class _DetailPageState extends State<DetailPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: GestureDetector(
-                                  onTap: () => {
-                                    
-                                  },
+                                  onTap: () => {},
                                   child: Center(
                                     child: Text(
                                       "Book Now",

@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   }
 
   loadEventData() async {
-    eventStream = await DatabaseMethods().getallEvent();
+    eventStream = await DatabaseMethods().getAllEvents();
     setState(() {});
   }
 

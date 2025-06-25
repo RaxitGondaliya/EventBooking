@@ -8,14 +8,7 @@ class DatabaseMethods {
         .set(userInfoMap);
   }
 
-  Future addEvent(Map<String, dynamic> userInfoMap, String id) async {
-    return await FirebaseFirestore.instance
-        .collection("Event")
-        .doc(id)
-        .set(userInfoMap);
-  }
-
-  Future<Stream<QuerySnapshot>> getallEvent() async {
-    return await FirebaseFirestore.instance.collection("Event").snapshots();
+  Future<Stream<QuerySnapshot>> getAllEvents() async {
+    return FirebaseFirestore.instance.collection("Event").snapshots();
   }
 }
